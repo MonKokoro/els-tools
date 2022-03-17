@@ -1,6 +1,6 @@
 <template>
   <div class="common-layout home-page">
-    <div class="home-welcome">
+    <div class="home-tools">
       <div>艾尔工具箱上线啦！</div>
     </div>
     <div class="home-update-log"></div>
@@ -23,12 +23,14 @@ export default defineComponent({
 .home-page{
   width: 100%;
   height: 100%;
-  .home-welcome{
+  .home-tools{
+    background: white;
     display: flex;
     width: 100%;
-    height: 500px;
-    justify-content: center;
-    align-items: center;
+    height: 300px;
+    // padding: 12px;
+    // justify-content: center;
+    // align-items: center;
   }
   .home-update-log{
     display: flex;

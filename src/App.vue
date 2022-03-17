@@ -7,17 +7,21 @@
 </template> --->
 
 <template>
+  <transition name="fade">
+    <IceBurnerResult v-if="this.$store.state.iceBurnerResultShow" />
+  </transition>
   <div class="homeWrap">
     <el-container style="height: 100%">
       <el-aside width="300px">
         <!---<div className="menu-title">
           els工具箱
         </div>--->
+        
         <el-menu
-          default-active="0"
+          :default-active="getCurrentRouter().path"
           class="el-menu-vertical-demo"
         >
-          <router-link v-for="(item, index) in menuJson" :to="item.path" :key="index" @click="activeUpdate(index)">
+          <router-link v-for="(item, index) in menuJson" :to="item.path" :key="item.path" @click="activeUpdate(index)">
             <el-menu-item :index="item.path">
               <el-icon><icon-menu /></el-icon>
               <span>{{item.name}}</span>
@@ -26,14 +30,17 @@
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header>
+        <el-header height="74px">
           <div class="header-top">
-            <el-page-header :icon="ArrowLeft" :content="menuJson[activeIndex].name" @back="headerBack(this)" style="margin-left: 12px"/>
-
+            <el-page-header :icon="ArrowLeft" :content="getCurrentRouter().name" @back="headerBack(this)" style="margin-left: 12px"/>
+            <div class="header-message">
+              <el-icon><chat-line-round /></el-icon>
+              艾尔工具箱v1.0上线啦
+            </div>
           </div>
         </el-header>
         <el-main>
-          <transition name="fade"><router-view></router-view></transition>
+            <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -44,9 +51,12 @@
   import { ref } from "vue"
   import { useRouter } from 'vue-router'
   import router from "./router"
+  import { ChatLineRound, ArrowLeft } from '@element-plus/icons-vue'
+  import IceBurnerResult from "./components/IceBurnerResult.vue"
   const menuJson: object[] = [
-    {name: "首页", path: "/", key: 0},
-    {name: "收集册模拟器", path: "/about", key: 1}
+    {name: "首页", path: "/"},
+    {name: "收集册模拟器", path: "/about"},
+    {name: "挫冰模拟器", path: "/ice-burners-imitater"},
   ]
   let activeIndex = ref(0)
   function activeUpdate(index: number): any {
@@ -59,6 +69,19 @@
     activeIndex.value = 0
     router.replace('/');
   }
+  function getCurrentRouter(): object {
+    let currentRouter = useRouter();
+    return currentRouter.currentRoute.value
+  }
+</script>
+
+<script lang="ts">
+
+export default {
+  components: {
+    
+  },
+}
 </script>
 
 <style lang="less">
@@ -71,6 +94,8 @@ a{ text-decoration: none }
   top: 0;
   width: 100%;
   height: 100%;
+  min-width: 1080px;
+  overflow: hidden;
 }
 .menu-title{
   width: 100%;
@@ -78,7 +103,7 @@ a{ text-decoration: none }
   text-align: center;
 }
 .el-header{
-  padding: 0 !important
+  padding: 0 !important;
 }
 .el-main{
   background: #F0F0F0;
@@ -91,6 +116,14 @@ a{ text-decoration: none }
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
   .el-page-header{
     line-height: 50px;
+  }
+  .header-message{
+    width: 100%;
+    height: 24px;
+    font-size: 12px;
+    line-height: 12px;
+    padding: 6px 12px;
+    color: rgba(0,21,41,.8)
   }
 }
 
